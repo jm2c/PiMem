@@ -3,36 +3,40 @@ package com.jmcareaga.pimem
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var game: MemGame
-    private lateinit var btn0: Button
-    private lateinit var btn1: Button
-    private lateinit var btn2: Button
-    private lateinit var btn3: Button
-    private lateinit var btn4: Button
-    private lateinit var btn5: Button
-    private lateinit var btn6: Button
-    private lateinit var btn7: Button
-    private lateinit var btn8: Button
-    private lateinit var btn9: Button
+    private lateinit var tvPiStr: TextView
+    private lateinit var tvScore: TextView
+    private lateinit var btnReset: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        game = MemGame()
-        btn0 = findViewById(R.id.btn0)
-        btn1 = findViewById(R.id.btn1)
-        btn2 = findViewById(R.id.btn2)
-        btn3 = findViewById(R.id.btn3)
-        btn4 = findViewById(R.id.btn4)
-        btn5 = findViewById(R.id.btn5)
-        btn6 = findViewById(R.id.btn6)
-        btn7 = findViewById(R.id.btn7)
-        btn8 = findViewById(R.id.btn8)
-        btn9 = findViewById(R.id.btn9)
 
+        tvPiStr  = findViewById(R.id.tvPiDigits)
+        tvScore  = findViewById(R.id.tvScore)
+        btnReset = findViewById(R.id.btnReset)
+        val btn0 = findViewById<Button>(R.id.btn0)
+        val btn1 = findViewById<Button>(R.id.btn1)
+        val btn2 = findViewById<Button>(R.id.btn2)
+        val btn3 = findViewById<Button>(R.id.btn3)
+        val btn4 = findViewById<Button>(R.id.btn4)
+        val btn5 = findViewById<Button>(R.id.btn5)
+        val btn6 = findViewById<Button>(R.id.btn6)
+        val btn7 = findViewById<Button>(R.id.btn7)
+        val btn8 = findViewById<Button>(R.id.btn8)
+        val btn9 = findViewById<Button>(R.id.btn9)
+
+        init()
+
+        btnReset.setOnClickListener{
+            init()
+            btnReset.visibility = View.INVISIBLE
+        }
 
         btn0.setOnClickListener{
             game.step(0)
@@ -76,12 +80,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun init() {
+        game = MemGame()
+        update()
+    }
+
+    fun update() {
+        tvPiStr.text = game.getPi()
+        tvScore.text = "Puntaje: ${game.getScore()}"
+    }
+
     private fun checkGameStatus(){
+        val score = game.getScore()
+
         if (game.isFinished()) {
-            val score = game.getScore()
-            Log.d("Game", "The Game has been terminated: $score")
+            Log.d("Game", "The Game has been terminated: ${score - 1}")
+            btnReset.visibility = View.VISIBLE
+            tvScore.text = "Puntaje final: ${game.getScore() - 1}"
         } else {
             Log.d("Game", "Continue...")
+            update()
         }
     }
 }

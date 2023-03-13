@@ -4,13 +4,16 @@ import android.util.Log
 
 class MemGame {
     private var finished: Boolean = false
-    private var piStr: String = "3."
-    private val digitsStr: String = "14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692346034861045432664821339360726024914127372458700660631558817488152092096282925409171536436"
-    private val digits: CharArray = digitsStr.toCharArray()
+    private var piStr: String = "π ≈ 3."
+    private val digitsStr: String = "1415926535897932384626433832795028841971693993751058209749" +
+            "4459230781640628620899862803482534211706798214808651328230664709384460955058223172" +
+            "5359408128481117450284102701938521105559644622948954930381964428810975665933446128" +
+            "4756482337867831652712019091456485669234603486104543266482133936072602491412737245" +
+            "8700660631558817488152092096282925409171536436"
     private var index: Int = 0
 
     private fun nextDigit(): Int {
-        return digits[index++].digitToInt()
+        return digitsStr[index++].digitToInt()
     }
 
     fun step(guess: Int): Boolean {
@@ -18,14 +21,22 @@ class MemGame {
             return false
 
         Log.d("Game", "Your guess: $guess")
-        val isCorrect = (guess == nextDigit().toInt())
+        val digit = nextDigit()
+        val isCorrect = (guess == digit.toInt())
         if(!isCorrect)
             finished = !finished
+
+        piStr += digit
+        Log.d("Game", "LLevamos $piStr")
         return isCorrect
     }
 
     fun getScore(): Int {
         return index
+    }
+
+    fun getPi(): String {
+        return piStr
     }
 
     fun isFinished(): Boolean {
