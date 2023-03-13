@@ -13,7 +13,12 @@ class MemGame {
     private var index: Int = 0
 
     private fun nextDigit(): Int {
-        return digitsStr[index++].digitToInt()
+        return try {
+            digitsStr[index++].digitToInt()
+        } catch (e: StringIndexOutOfBoundsException) {
+            this.finished = true
+            0
+        }
     }
 
     fun step(guess: Int): Boolean {
